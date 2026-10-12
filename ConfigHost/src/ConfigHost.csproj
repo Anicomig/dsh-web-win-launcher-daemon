@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>DshConfigHost</AssemblyName>
+    <RootNamespace>ConfigHost</RootNamespace>
+    <Version>1.0.0</Version>
+    <!--
+      发布形态（自包含单文件）刻意不写在这里：RuntimeIdentifier/SelfContained
+      若进 csproj，每次 `dotnet build` 都会把整套运行时拷进 bin\（约 150 MB，
+      每次编译白等）。改由 编译宿主.cmd 的 dotnet publish 命令行提供，
+      于是开发期 build 轻快、发布期产物自包含。
+    -->
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <NoWarn>$(NoWarn);MSB3277</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4258.31" />
+  </ItemGroup>
+  <!--
+    EdgeAppDetector / EdgeAppDetector.cs 等同目录 .cs 没被默认 glob 包含（实测 CompileSources 空），
+    显式列出来比依赖默认行为更稳。新增 .cs 时请保持这个 ItemGroup 同步。
+  -->
+  <ItemGroup>
+    <Compile Include="$(MSBuildProjectDirectory)*.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\wwwroot\**" LinkBase="wwwroot" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

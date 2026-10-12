@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>false</UseWindowsForms>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>ConfigHost.Tests</AssemblyName>
+    <RootNamespace>ConfigHost.Tests</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <!--
+      只把被测的纯逻辑文件编进测试，不引用整个宿主项目：
+      引用项目会把 WebView2 与 WinForms 一起拖进来，还会因 WinExe 产生额外麻烦。
+      ConfigEditor 不依赖任何宿主类型，所以单文件编译即可。
+    -->
+    <Compile Include="..\src\ConfigEditor.cs" Link="ConfigEditor.cs" />
+    <Compile Include="..\src\FolderTarget.cs" Link="FolderTarget.cs" />
+  </ItemGroup>
+</Project>
